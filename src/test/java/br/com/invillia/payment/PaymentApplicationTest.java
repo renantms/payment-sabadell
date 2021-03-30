@@ -1,10 +1,10 @@
-package br.com.invillia.pagamento;
+package br.com.invillia.payment;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PagamentoApplicationTests {
+class PaymentApplicationTest {
 
 	@Test
 	void contextLoads() {
