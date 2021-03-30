@@ -4,10 +4,10 @@ import br.com.invillia.payment.dto.PaymentDto;
 import br.com.invillia.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/payment")
@@ -20,9 +20,26 @@ public class PaymentControl {
         this.paymentService = paymentService;
     }
 
-    @GetMapping
+    @GetMapping("/v1/{name}")
     public ResponseEntity<PaymentDto> getPayment(@PathVariable String name){
-        return ResponseEntity.ok(paymentService.getPayment(name));
+        Optional<PaymentDto> paymentDto = paymentService.getPayment(name);
+
+        if(paymentDto.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(paymentDto.get());
+    }
+
+    @PostMapping("/v1")
+    public ResponseEntity<PaymentDto> postPayment(@RequestBody PaymentDto paymentDto){
+        Optional<PaymentDto> optionalPaymentDto = paymentService.postPayment(paymentDto);
+
+        if(optionalPaymentDto.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.created(URI.create("/v1/" + optionalPaymentDto.get().getName())).body(optionalPaymentDto.get());
     }
 
 }
