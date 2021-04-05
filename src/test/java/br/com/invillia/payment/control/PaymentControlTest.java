@@ -105,7 +105,4 @@ public class PaymentControlTest {
         assertFalse(paymentDtoTest.equals(responseEntity.getBody()));
     }
 
-
-
-
 }
