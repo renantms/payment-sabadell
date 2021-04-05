@@ -27,7 +27,7 @@ public class PaymentControlTest {
     private PaymentDto paymentDtoTest;
 
     @BeforeEach
-    public void beforeEach(){
+    void beforeEach(){
         MockitoAnnotations.openMocks(this);
 
         this.paymentControl = new PaymentControl(paymentService);
