@@ -20,7 +20,7 @@ public class PaymentControl {
         this.paymentService = paymentService;
     }
 
-    @GetMapping("/v1/{name}")
+    @GetMapping("/{name}")
     public ResponseEntity<PaymentDto> getPayment(@PathVariable String name){
         Optional<PaymentDto> paymentDto = paymentService.getPayment(name);
 
@@ -31,7 +31,7 @@ public class PaymentControl {
         return ResponseEntity.ok(paymentDto.get());
     }
 
-    @PostMapping("/v1")
+    @PostMapping
     public ResponseEntity<PaymentDto> postPayment(@RequestBody PaymentDto paymentDto){
         Optional<PaymentDto> optionalPaymentDto = paymentService.postPayment(paymentDto);
 
@@ -39,7 +39,7 @@ public class PaymentControl {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.created(URI.create("/v1/" + optionalPaymentDto.get().getName())).body(optionalPaymentDto.get());
+        return ResponseEntity.created(URI.create(optionalPaymentDto.get().getName())).body(optionalPaymentDto.get());
     }
 
 }

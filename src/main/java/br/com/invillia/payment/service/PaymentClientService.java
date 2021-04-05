@@ -11,10 +11,10 @@ import java.util.Optional;
 @FeignClient(value = "payment", url = "localhost:8081/payment")
 public interface PaymentClientService {
 
-    @GetMapping("/v1/{name}")
+    @GetMapping("/{name}")
     Optional<PaymentDto> getPayment(@PathVariable String name);
 
-    @PostMapping("/v1")
+    @PostMapping
     Optional<PaymentDto> postPayment(@RequestBody PaymentDto paymentDto);
 
 }
