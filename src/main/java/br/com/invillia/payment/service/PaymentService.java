@@ -5,6 +5,7 @@ import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,7 +21,7 @@ public class PaymentService {
         this.producerPaymentService = producerPaymentService;
     }
 
-    public Optional<PaymentDto> getPayment(String name) {
+    public List<PaymentDto> getPayment(String name) {
         return paymentClientService.getPayment(name);
     }
 

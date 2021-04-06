@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -20,15 +21,15 @@ public class PaymentControl {
         this.paymentService = paymentService;
     }
 
-    @GetMapping("/{name}")
-    public ResponseEntity<PaymentDto> getPayment(@PathVariable String name){
-        Optional<PaymentDto> paymentDto = paymentService.getPayment(name);
+    @GetMapping
+    public ResponseEntity<List<PaymentDto>> getPayment(@RequestParam String name){
+        List<PaymentDto> paymentDto = paymentService.getPayment(name);
 
         if(paymentDto.isEmpty()){
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(paymentDto.get());
+        return ResponseEntity.ok(paymentDto);
     }
 
     @PostMapping
