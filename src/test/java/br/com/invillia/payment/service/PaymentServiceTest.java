@@ -22,12 +22,15 @@ public class PaymentServiceTest {
     @Mock
     private PaymentClientService paymentClientService;
 
+    @Mock
+    private ProducerPaymentService producerPaymentService;
+
     private PaymentDto paymentDtoTest;
 
     @BeforeEach
     void beforeEach(){
         MockitoAnnotations.openMocks(this);
-        paymentService = new PaymentService(paymentClientService);
+        paymentService = new PaymentService(paymentClientService, producerPaymentService);
 
         paymentDtoTest = new PaymentDto();
         paymentDtoTest.setName("Renan");

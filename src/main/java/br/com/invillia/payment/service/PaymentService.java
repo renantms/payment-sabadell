@@ -12,9 +12,12 @@ public class PaymentService {
 
     private PaymentClientService paymentClientService;
 
+    private ProducerPaymentService producerPaymentService;
+
     @Autowired
-    public PaymentService(PaymentClientService paymentClientService) {
+    public PaymentService(PaymentClientService paymentClientService, ProducerPaymentService producerPaymentService) {
         this.paymentClientService = paymentClientService;
+        this.producerPaymentService = producerPaymentService;
     }
 
     public Optional<PaymentDto> getPayment(String name) {
@@ -22,11 +25,7 @@ public class PaymentService {
     }
 
     public Optional<PaymentDto> postPayment(PaymentDto paymentDto) {
-        try{
-            return paymentClientService.postPayment(paymentDto);
-        }catch(FeignException e){
-            return Optional.empty();
-        }
-
+        producerPaymentService.postPayment(paymentDto);
+        return Optional.empty();
     }
 }

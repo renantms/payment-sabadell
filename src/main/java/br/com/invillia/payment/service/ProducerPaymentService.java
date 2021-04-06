@@ -18,7 +18,7 @@ public class ProducerPaymentService {
     }
 
     public void postPayment(PaymentDto paymentDto){
-        kafkaTemplate.send("payment", paymentDto);
+        kafkaTemplate.send("payment3", paymentDto);
     }
 
 }

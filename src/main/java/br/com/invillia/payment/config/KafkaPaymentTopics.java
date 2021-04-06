@@ -10,7 +10,7 @@ public class KafkaPaymentTopics {
 
     @Bean
     public NewTopic newTopic(){
-        return TopicBuilder.name("payment")
+        return TopicBuilder.name("payment3")
                             .build();
     }
 
