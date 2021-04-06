@@ -1,12 +1,10 @@
 package br.com.invillia.payment.service;
 
 import br.com.invillia.payment.dto.PaymentDto;
-import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PaymentService {
@@ -25,8 +23,7 @@ public class PaymentService {
         return paymentClientService.getPayment(name);
     }
 
-    public Optional<PaymentDto> postPayment(PaymentDto paymentDto) {
-        producerPaymentService.postPayment(paymentDto);
-        return Optional.empty();
+    public boolean postPayment(PaymentDto paymentDto) {
+        return producerPaymentService.postPayment(paymentDto);
     }
 }

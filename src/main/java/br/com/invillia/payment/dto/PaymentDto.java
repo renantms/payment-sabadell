@@ -24,4 +24,8 @@ public class PaymentDto {
     public int hashCode() {
         return Objects.hash(name, value);
     }
+
+    public boolean verify() {
+        return name != null && value != null;
+    }
 }

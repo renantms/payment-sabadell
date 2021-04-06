@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/payment")
@@ -34,13 +33,10 @@ public class PaymentControl {
 
     @PostMapping
     public ResponseEntity<PaymentDto> postPayment(@RequestBody PaymentDto paymentDto){
-        Optional<PaymentDto> optionalPaymentDto = paymentService.postPayment(paymentDto);
-
-        if(optionalPaymentDto.isEmpty()) {
+        if(!paymentService.postPayment(paymentDto)) {
             return ResponseEntity.badRequest().build();
         }
-
-        return ResponseEntity.created(URI.create(optionalPaymentDto.get().getName())).body(optionalPaymentDto.get());
+        return ResponseEntity.created(URI.create(paymentDto.getName())).body(paymentDto);
     }
 
 }

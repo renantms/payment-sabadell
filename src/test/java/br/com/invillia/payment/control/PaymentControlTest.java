@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,26 +39,29 @@ public class PaymentControlTest {
         paymentDtoTest.add(new PaymentDto());
         paymentDtoTest.get(0).setName("Renan");
         paymentDtoTest.get(0).setValue(new BigDecimal("300"));
+        paymentDtoTest.add(new PaymentDto());
+        paymentDtoTest.get(1).setName("Renan");
     }
 
-    private void configureGet(String requestParam, List<PaymentDto> paymentDto){
-        Mockito.when(paymentService.getPayment(requestParam)).thenReturn(paymentDto);
+    private void configureGet(String name, List<PaymentDto> payment) {
+        Mockito.when(paymentService.getPayment(name)).thenReturn(payment.stream()
+                .filter((value -> value.getName().equals(name))).collect(Collectors.toList()));
     }
 
-    private ResponseEntity<List<PaymentDto>> configureGetAndResponseEntity(String pathVariable, List<PaymentDto> paymentDto) {
-        configureGet(pathVariable, paymentDto);
-        return paymentControl.getPayment(pathVariable);
+    private ResponseEntity<List<PaymentDto>> configureGetAndResponseEntity(String name, List<PaymentDto> payment) {
+        configureGet(name, payment);
+        return paymentControl.getPayment(name);
     }
 
 
-//    private void configurePost(PaymentDto paymentDto, List<PaymentDto> optionalPaymentDto) {
-//        Mockito.when(paymentService.postPayment(paymentDto)).thenReturn(optionalPaymentDto);
-//    }
-//
-//    private ResponseEntity<PaymentDto> configurePostAndResponseEntity(PaymentDto paymentDto, Optional<PaymentDto> optionalPaymentDto) {
-//        configurePost(paymentDto, optionalPaymentDto);
-//        return paymentControl.postPayment(paymentDto);
-//    }
+    private void configurePost(PaymentDto paymentDto, boolean created) {
+        Mockito.when(paymentService.postPayment(paymentDto)).thenReturn(created);
+    }
+
+    private ResponseEntity<PaymentDto> configurePostAndResponseEntity(PaymentDto paymentDto, boolean created) {
+        configurePost(paymentDto, created);
+        return paymentControl.postPayment(paymentDto);
+    }
 
     @Test
     void getWillReturnStatusCodeOK(){
@@ -74,39 +77,34 @@ public class PaymentControlTest {
 
     @Test
     void getWillReturnStatusCodeNotFound(){
-        ResponseEntity<List<PaymentDto>> responseEntity = configureGetAndResponseEntity("Scolari", List.of());
+        ResponseEntity<List<PaymentDto>> responseEntity = configureGetAndResponseEntity("Scolari", paymentDtoTest);
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
     }
 
     @Test
     void getWillNotReturnCorrectBody(){
-        ResponseEntity<List<PaymentDto>> responseEntity = configureGetAndResponseEntity("Scolari", List.of());
+        ResponseEntity<List<PaymentDto>> responseEntity = configureGetAndResponseEntity("Scolari", paymentDtoTest);
         assertFalse(paymentDtoTest.equals(responseEntity.getBody()));
     }
 
-//    @Test
-//    void postWillReturnStatusCodeCreated(){
-//        ResponseEntity<PaymentDto> responseEntity = configurePostAndResponseEntity(paymentDtoTest, Optional.of(paymentDtoTest));
-//        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
-//    }
-//
-//    @Test
-//    void postWillReturnCorrectBody(){
-//        ResponseEntity<PaymentDto> responseEntity = configurePostAndResponseEntity(paymentDtoTest, Optional.of(paymentDtoTest));
-//        assertTrue(paymentDtoTest.equals(responseEntity.getBody()));
-//    }
-//
-//
-//    @Test
-//    void postWillReturnStatusCodeBadRequest(){
-//        ResponseEntity<PaymentDto> responseEntity = configurePostAndResponseEntity(paymentDtoTest, Optional.empty());
-//        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-//    }
-//
-//    @Test
-//    void postWillNotReturnCorrectBody(){
-//        ResponseEntity<PaymentDto> responseEntity = configurePostAndResponseEntity(paymentDtoTest, Optional.empty());
-//        assertFalse(paymentDtoTest.equals(responseEntity.getBody()));
-//    }
+    @Test
+    void postWillReturnStatusCodeCreated(){
+        ResponseEntity<PaymentDto> responseEntity = configurePostAndResponseEntity(paymentDtoTest.get(0), paymentDtoTest.get(0).verify());
+        assertEquals(HttpStatus.CREATED, responseEntity.getStatusCode());
+    }
+
+    @Test
+    void postWillReturnCorrectBody(){
+        ResponseEntity<PaymentDto> responseEntity = configurePostAndResponseEntity(paymentDtoTest.get(0), paymentDtoTest.get(0).verify());
+        assertTrue(paymentDtoTest.get(0).equals(responseEntity.getBody()));
+    }
+
+
+    @Test
+    void postWillReturnStatusCodeBadRequest(){
+        ResponseEntity<PaymentDto> responseEntity = configurePostAndResponseEntity(paymentDtoTest.get(1), paymentDtoTest.get(1).verify());
+        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    }
+
 
 }
