@@ -19,8 +19,8 @@ public class PaymentService {
         this.producerPaymentService = producerPaymentService;
     }
 
-    public List<PaymentDto> getPayment(String name) {
-        return paymentClientService.getPayment(name);
+    public List<PaymentDto> getPayment(String name, int page, int size) {
+        return paymentClientService.getPayment(name, page, size);
     }
 
     public boolean postPayment(PaymentDto paymentDto) {

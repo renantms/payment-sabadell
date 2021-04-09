@@ -21,8 +21,10 @@ public class PaymentControl {
     }
 
     @GetMapping
-    public ResponseEntity<List<PaymentDto>> getPayment(@RequestParam String name){
-        List<PaymentDto> paymentDto = paymentService.getPayment(name);
+    public ResponseEntity<List<PaymentDto>> getPayment(@RequestParam(required = false) String name,
+                                                       @RequestParam(required = false, defaultValue = "0") int page,
+                                                       @RequestParam(required = false, defaultValue = "5") int size){
+        List<PaymentDto> paymentDto = paymentService.getPayment(name, page, size);
 
         if(paymentDto.isEmpty()){
             return ResponseEntity.notFound().build();

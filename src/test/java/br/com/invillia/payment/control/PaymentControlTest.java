@@ -44,13 +44,13 @@ public class PaymentControlTest {
     }
 
     private void configureGet(String name, List<PaymentDto> payment) {
-        Mockito.when(paymentService.getPayment(name)).thenReturn(payment.stream()
+        Mockito.when(paymentService.getPayment(name, 0, 5)).thenReturn(payment.stream()
                 .filter((value -> value.getName().equals(name))).collect(Collectors.toList()));
     }
 
     private ResponseEntity<List<PaymentDto>> configureGetAndResponseEntity(String name, List<PaymentDto> payment) {
         configureGet(name, payment);
-        return paymentControl.getPayment(name);
+        return paymentControl.getPayment(name, 0, 5);
     }
 
 

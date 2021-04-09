@@ -26,6 +26,6 @@ public class PaymentDto {
     }
 
     public boolean verify() {
-        return name != null && value != null;
+        return name != null && value != null && value.doubleValue() >= 0;
     }
 }

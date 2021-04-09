@@ -13,6 +13,8 @@ import java.util.List;
 public interface PaymentClientService {
 
     @GetMapping
-    List<PaymentDto> getPayment(@RequestParam String name);
+    List<PaymentDto> getPayment(@RequestParam String name,
+                                @RequestParam int page,
+                                @RequestParam int size);
 
 }

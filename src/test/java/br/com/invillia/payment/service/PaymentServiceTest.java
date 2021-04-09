@@ -44,13 +44,13 @@ public class PaymentServiceTest {
     }
 
     private void configureGet(String name, List<PaymentDto> payment) {
-        Mockito.when(paymentClientService.getPayment(name)).thenReturn(payment.stream()
+        Mockito.when(paymentClientService.getPayment(name, 0, 5)).thenReturn(payment.stream()
                 .filter((value -> value.getName().equals(name))).collect(Collectors.toList()));
     }
 
     private List<PaymentDto> configureGetAndReturn(String name, List<PaymentDto> payment) {
         configureGet(name, payment);
-        return paymentService.getPayment(name);
+        return paymentService.getPayment(name, 0, 5);
     }
 
     private void configurePost(PaymentDto paymentDto, boolean created) {
