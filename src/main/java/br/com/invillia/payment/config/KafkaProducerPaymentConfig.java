@@ -1,6 +1,6 @@
 package br.com.invillia.payment.config;
 
-import br.com.invillia.payment.dto.PaymentDto;
+import br.com.invillia.payment.domain.request.PaymentRequest;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class KafkaProducerPaymentConfig {
 
     @Bean
-    public ProducerFactory<String, PaymentDto> producerFactory(){
+    public ProducerFactory<String, PaymentRequest> producerFactory(){
         return new DefaultKafkaProducerFactory<>(producerConfigs());
     }
 
@@ -32,7 +32,7 @@ public class KafkaProducerPaymentConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, PaymentDto> kafkaTemplate(){
+    public KafkaTemplate<String, PaymentRequest> kafkaTemplate(){
         return new KafkaTemplate<>(producerFactory());
     }
 

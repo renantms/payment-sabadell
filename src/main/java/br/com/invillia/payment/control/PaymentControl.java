@@ -1,6 +1,7 @@
 package br.com.invillia.payment.control;
 
-import br.com.invillia.payment.dto.PaymentDto;
+import br.com.invillia.payment.domain.request.PaymentRequest;
+import br.com.invillia.payment.domain.response.PaymentResponse;
 import br.com.invillia.payment.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/payment")
@@ -21,24 +23,26 @@ public class PaymentControl {
     }
 
     @GetMapping
-    public ResponseEntity<List<PaymentDto>> getPayment(@RequestParam(required = false) String name,
-                                                       @RequestParam(required = false, defaultValue = "0") int page,
-                                                       @RequestParam(required = false, defaultValue = "5") int size){
-        List<PaymentDto> paymentDto = paymentService.getPayment(name, page, size);
+    public ResponseEntity<List<PaymentResponse>> getPayment(@RequestParam(required = false) String name,
+                                                            @RequestParam(required = false, defaultValue = "0") int page,
+                                                            @RequestParam(required = false, defaultValue = "5") int size){
+        List<PaymentResponse> paymentResponses = paymentService.getPayment(name, page, size);
 
-        if(paymentDto.isEmpty()){
+        if(paymentResponses.isEmpty()){
             return ResponseEntity.notFound().build();
         }
 
-        return ResponseEntity.ok(paymentDto);
+        return ResponseEntity.ok(paymentResponses);
     }
 
     @PostMapping
-    public ResponseEntity<PaymentDto> postPayment(@RequestBody PaymentDto paymentDto){
-        if(!paymentService.postPayment(paymentDto)) {
+    public ResponseEntity<PaymentResponse> postPayment(@RequestBody PaymentRequest paymentRequest){
+        Optional<PaymentResponse> paymentResponse = paymentService.postPayment(paymentRequest);
+
+        if(paymentResponse.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.created(URI.create(paymentDto.getName())).body(paymentDto);
+        return ResponseEntity.created(URI.create(paymentResponse.get().getName())).body(paymentResponse.get());
     }
 
 }

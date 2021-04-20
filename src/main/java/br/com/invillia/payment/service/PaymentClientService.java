@@ -1,6 +1,6 @@
 package br.com.invillia.payment.service;
 
-import br.com.invillia.payment.dto.PaymentDto;
+import br.com.invillia.payment.domain.response.PaymentResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,8 +13,8 @@ import java.util.List;
 public interface PaymentClientService {
 
     @GetMapping
-    List<PaymentDto> getPayment(@RequestParam String name,
-                                @RequestParam int page,
-                                @RequestParam int size);
+    List<PaymentResponse> getPayment(@RequestParam String name,
+                                     @RequestParam int page,
+                                     @RequestParam int size);
 
 }
